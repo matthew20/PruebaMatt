@@ -1,0 +1,144 @@
+<nz-layout class="app-layout">
+    <nz-sider class="menu-sidebar"
+              nzCollapsible
+              nzWidth="256px"
+              nzBreakpoint="md"
+              [(nzCollapsed)]="isCollapsed"
+              [nzTrigger]="null">
+      <div class="sidebar-logo">
+        <a href="#">
+          <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
+          <h1>Ant Design Of Angular</h1>
+        </a>
+      </div>
+      <ul nz-menu nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+        <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard">
+          <ul>
+            <li nz-menu-item nzMatchRouter>
+              <a routerLink="/dashboard">Prueba</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nz-sider>
+    <nz-layout>
+      <nz-header>
+        <div class="app-header">
+          <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+              <i class="trigger"
+                 nz-icon
+                 [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+              ></i>
+          </span>
+        </div>
+      </nz-header>
+      <nz-content>
+        <div class="inner-content">
+
+          <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+            <nz-divider nzText="Vehículo" nzOrientation="center"></nz-divider>
+            <nz-form-item>
+              <nz-form-label [nzSm]="8" [nzXs]="1" nzRequired>Marca</nz-form-label>
+              <nz-form-control [nzSm]="16" [nzXs]="8" nzErrorTip="Seleccione un Modelo">
+                <nz-select formControlName="selectMarca" nzShowSearch nzAllowClear nzPlaceHolder="Selecciona Marca" [(ngModel)]="selectedValueMarca" (ngModelChange)="ChangedMarca($event)">
+                  <nz-option *ngFor="let marca of this.listMarcas" nzLabel="{{marca.sMarca}}" nzValue="{{marca.iIdMarca}}"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSm]="8" [nzXs]="1" nzRequired>Submarca</nz-form-label>
+              <nz-form-control [nzSm]="16" [nzXs]="8" nzErrorTip="Seleccione una Submarca">
+                <nz-select formControlName="selectSubmarca" nzShowSearch nzAllowClear nzPlaceHolder="Selecciona Submarca" [(ngModel)]="selectedValueSubMarca" (ngModelChange)="ChangedSubmarca($event)">
+                  <nz-option *ngFor="let submarcas of this.listSubmarcas" nzLabel="{{submarcas.sSubMarca}}" nzValue="{{submarcas.iIdSubMarca}}"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSm]="8" [nzXs]="1" nzRequired>Módelo</nz-form-label>
+              <nz-form-control [nzSm]="16" [nzXs]="8" nzErrorTip="Seleccione una Módelo">
+                <nz-select formControlName="selectModelo" nzShowSearch nzAllowClear nzPlaceHolder="Selecciona Módelo" [(ngModel)]="selectedValueModelo" (ngModelChange)="ChangedModelo($event)">
+                  <nz-option *ngFor="let modelo of this.listModelo" nzLabel="{{modelo.sModelo}}" nzValue="{{modelo.iIdModelo}}"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSm]="8" [nzXs]="1" nzRequired>Descripción</nz-form-label>
+              <nz-form-control [nzSm]="16" [nzXs]="8" nzErrorTip="Selecione una Descripción">
+                <nz-select formControlName="selectDescripcion" nzShowSearch nzAllowClear nzPlaceHolder="Selecciona Descripción" [(ngModel)]="selectedValueDescripcionModelo">
+                  <nz-option *ngFor="let descripcionModelo of this.listDescripcionModelo" nzLabel="{{descripcionModelo.sDescripcion}}" nzValue="{{descripcionModelo.iIdDescripcionModelo}}"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-divider nzText="Domicilio" nzOrientation="center"></nz-divider>
+
+            <nz-form-item>
+              <nz-form-label [nzSm]="8" [nzXs]="1" nzRequired>Código Postal</nz-form-label>
+              <nz-form-control [nzSm]="16" [nzXs]="8" nzErrorTip="Ingrese Código Postal">
+                <input
+                  formControlName="inputCodigoPostal"
+                  style="width: 120px"
+                  nz-input
+                  nz-tooltip
+                  nzTooltipTrigger="focus"
+                  nzTooltipPlacement="topLeft"
+                  nzOverlayClassName="numeric-input"
+                  [ngModel]="valueCP"
+                  placeholder="Ingrese Código Postak"
+                  (ngModelChange)="SearchPostal($event)"
+                />
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label [nzSm]="8" [nzXs]="1" nzRequired>Estado</nz-form-label>
+              <nz-form-control [nzSm]="16" [nzXs]="8" nzErrorTip="Ingrese Estado">
+                <input
+                [disabled]="true"
+                formControlName="inputEstado"
+                style="width: 120px"
+                nz-input
+                [ngModel]="valueEstado"
+                placeholder="Estado"
+                readonly
+                />
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label [nzSm]="8" [nzXs]="1" nzRequired>Municipio</nz-form-label>
+              <nz-form-control [nzSm]="16" [nzXs]="8" nzErrorTip="Ingrese Municipio">
+                <input
+                [disabled]="true"
+                  formControlName="inputMunicipio"
+                  style="width: 120px"
+                  nz-input
+                  [ngModel]="valueMunicipio"
+                  placeholder="Municipio"
+                  readonly
+                />
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label [nzSm]="8" [nzXs]="1" nzRequired>Colonia</nz-form-label>
+              <nz-form-control [nzSm]="16" [nzXs]="8" nzErrorTip="Selecione una Colonia">
+                <nz-select formControlName="selectColonia" nzShowSearch nzAllowClear nzPlaceHolder="Selecciona Colonia" [(ngModel)]="selectedValueColonia">
+                  <nz-option *ngFor="let colonia of this.listColonias" nzLabel="{{colonia.sUbicacion}}" nzValue="{{colonia.iIdUbicacion}}"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 16, offset: 8 }">
+                <button nz-button nzType="primary">Submit</button>
+              </nz-form-control>
+            </nz-form-item>
+          </form>
+          <!-- <router-outlet></router-outlet> -->
+        </div>
+      </nz-content>
+      <nz-footer>Ant Design ©2020 Implement By Angular</nz-footer>
+    </nz-layout>
+  </nz-layout>
+  
